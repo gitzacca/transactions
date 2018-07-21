@@ -61,6 +61,10 @@ public class Transaction {
         return balance;
     }
 
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     public Date getEventDate() {
         return eventDate;
     }
