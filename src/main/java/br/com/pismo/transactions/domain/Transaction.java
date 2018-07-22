@@ -41,6 +41,8 @@ public class Transaction {
         this.dueDate = dueDate;
     }
 
+    protected Transaction() {}
+
     public Long getId() {
         return id;
     }
