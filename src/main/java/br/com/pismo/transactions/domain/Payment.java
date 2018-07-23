@@ -12,6 +12,8 @@ public class Payment {
         this.amount = amount;
     }
 
+    protected Payment() {}
+
     public Long getAccountId() {
         return accountId;
     }
