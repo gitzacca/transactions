@@ -70,7 +70,6 @@ public class TransactionServiceDefault implements TransactionService {
                 balance = balance.add(payment.getAmount());
 
                 if (balance.signum() <= 0) {
-                    //negativo (Pagamento menor que a divida) ou valor do pagamento igual a divida
                     transactionToBePaid.setBalance(balance);
                     PaymentTracking paymentTracking = new PaymentTracking(paymentTransaction.getId(), transactionToBePaid.getId(), payment.getAmount());
                     paymentsTracking.add(paymentTracking);
@@ -79,7 +78,6 @@ public class TransactionServiceDefault implements TransactionService {
                     break;
 
                 } else {
-                    //positivo (Pagamento maior que a divida)
                     transactionToBePaid.setBalance(new BigDecimal(0));
                     PaymentTracking paymentTracking = new PaymentTracking(paymentTransaction.getId(), transactionToBePaid.getId(), transactionToBePaid.getAmount().negate());
                     paymentsTracking.add(paymentTracking);
@@ -105,36 +103,5 @@ public class TransactionServiceDefault implements TransactionService {
             accountLimitBalancer.updateLimits(accountId, LimitType.WITHDRAWAL, amount);
         }
     }
-
-//    public static void main(String[] args) {
-//
-//        Transaction transaction10 = new Transaction(1L, OperationsTypes.INSTALLMENT_PURCHASE, new BigDecimal(10), new BigDecimal(10), new Date(2010, 01, 01),new Date(2010, 01, 01));
-//        Transaction transaction0 = new Transaction(1L, OperationsTypes.INSTALLMENT_PURCHASE, new BigDecimal(10), new BigDecimal(10), new Date(2017, 01, 01),new Date(2017, 01, 01));
-//        Transaction transaction1 = new Transaction(1L, OperationsTypes.WITHDRAWAL, new BigDecimal(10), new BigDecimal(10), new Date(2016, 01, 01),new Date(2016, 01, 01));
-//        Transaction transaction2 = new Transaction(1L, OperationsTypes.WITHDRAWAL, new BigDecimal(10), new BigDecimal(10), new Date(2014, 01, 01),new Date(2014, 01, 01));
-//        Transaction transaction3 = new Transaction(1L, OperationsTypes.WITHDRAWAL, new BigDecimal(10), new BigDecimal(10), new Date(2015, 01, 01),new Date(2015, 01, 01));
-//
-//        Comparator<Transaction> comparator = Comparator.comparing(transaction -> transaction.getOperation().getChargeOrder());
-//        comparator = comparator.thenComparing(transaction -> transaction.getEventDate());
-//
-//        List<Transaction> list = Arrays.asList(transaction0, transaction1, transaction10, transaction2, transaction3);
-//
-//        List<Transaction> unpaidTransactionsSorted = list.stream()
-//                .sorted(comparator)
-//                .collect(Collectors.toList());
-//
-//        System.out.println(unpaidTransactionsSorted);
-//
-//
-//        BigDecimal pagamento = new BigDecimal(100);
-//        BigDecimal divida = new BigDecimal(50);
-//
-//        if (pagamento.compareTo(divida) > 0) {
-//            System.out.println("Pagamento maior que a divida");
-//        } else {
-//            System.out.println("Divida maior que o pagamento");
-//        }
-//
-//    }
 
 }
