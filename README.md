@@ -16,21 +16,25 @@ Application -> Domain -> External
 
 A aplicação foi desenvolvida para que seja iniciada da forma mais simples possível, basta seguir os passos:
 
- * Checkout dos projetos: `git clone git@github.com:gitzacca/transactions.git` e `git clone git@github.com:gitzacca/accounts.git`
+ * Checkout dos projetos: `git clone https://github.com/gitzacca/accounts.git` e `git clone https://github.com/gitzacca/transactions.git`
 
 
-Para executar a aplicação execute o comando: `gradlew bootRun`
+Para executar a aplicação execute o comando: `sh run.sh` no diretório do projeto transactions. (É necessário ter o java 8 instalado)
 
-A página estará disponível no endereço: `http://localhost:8080/`
+Os microserviços estarão disponivel nos seguintes endereços:
 
-Disponibilizei uma API Rest que seria consumida por outro sistema: `http://localhost:8080/users?page=0&size=10`
+(accounts) `http://localhost:8081/`
+
+(transactions) `http://localhost:8080/`
+
+Para facilitar o acesso aos serviços, deixei a coleção do postman (`https://www.getpostman.com/`) na pasta postman, basta fazer o import do arquivo e já estará tudo pronto para perfomar os serviços! :)
+
 
 ## Agradecimento
 
-Quero frisar que foi um teste muito interessante, e agradeço a oportunidade de mostrar o meu trabalho!
-
-Estou disponível para esclarecer qualquer dúvida :)
+Gostaria de agradecer pela oportunidade de mostrar meu trabalho, e caso fique alguma dúvida referente ao projeto, estarei disponivel nos contatos abaixo:
 
 
 zaccabruno@gmail.com
+
 (11)97160-9350
