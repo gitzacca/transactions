@@ -3,7 +3,6 @@ package br.com.pismo.transactions.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,8 +23,25 @@ public class TransactionServiceDefault implements TransactionService {
 
     @Override
     public Transaction addTransaction(Long accountId, OperationsTypes operation, BigDecimal amount) {
+
+        BigDecimal originalAmount = amount;
+        List<Transaction> positiveTransactions = transactionRepository.listPositiveTransactionBy(accountId);
+
+        for (Transaction positiveTransaction : positiveTransactions) {
+
+            if (positiveTransaction.getBalance().compareTo(amount) > 0) {
+                BigDecimal newBalance = positiveTransaction.getBalance().subtract(amount);
+                positiveTransaction.setBalance(newBalance);
+                amount = new BigDecimal(0);
+            } else {
+                amount = amount.subtract(positiveTransaction.getBalance());
+                positiveTransaction.setBalance(new BigDecimal(0));
+            }
+
+        }
+
         amount = amount.negate();
-        Transaction transaction = new Transaction(accountId, operation, amount, amount, new Date(), new Date());
+        Transaction transaction = new Transaction(accountId, operation, originalAmount.negate(), amount, new Date(), new Date());
         changeAvailableCredit(accountId, operation, amount);
         return transactionRepository.save(transaction);
     }
@@ -65,11 +81,13 @@ public class TransactionServiceDefault implements TransactionService {
                 } else {
                     //positivo (Pagamento maior que a divida)
                     transactionToBePaid.setBalance(new BigDecimal(0));
-                    PaymentTracking paymentTracking = new PaymentTracking(paymentTransaction.getId(), transactionToBePaid.getId(), new BigDecimal(0));
+                    PaymentTracking paymentTracking = new PaymentTracking(paymentTransaction.getId(), transactionToBePaid.getId(), transactionToBePaid.getAmount().negate());
                     paymentsTracking.add(paymentTracking);
                     payment.setAmount(balance);
                     changeAvailableCredit(payment.getAccountId(), transactionToBePaid.getOperation(), transactionToBePaid.getAmount());
+                    paymentTransaction.setBalance(balance);
                 }
+
 
             }
 
